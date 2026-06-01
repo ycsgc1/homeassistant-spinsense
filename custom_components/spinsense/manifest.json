@@ -6,7 +6,7 @@
         "@fwump38"
     ],
     "requirements": [],
-    "version": "0.1.23",
+    "version": "0.2.0",
     "issue_tracker": "https://github.com/ycsgc1/homeassistant-spinsense/issues",
     "documentation": "https://github.com/ycsgc1/homeassistant-spinsense#readme",
     "config_flow": true,
