@@ -2,12 +2,13 @@
     "domain": "spinsense",
     "name": "SpinSense",
     "codeowners": [
+        "@ycsgc1",
         "@fwump38"
     ],
     "requirements": [],
     "version": "0.1.23",
-    "issue_tracker": "https://github.com/fwump38/SpinSense/issues",
-    "documentation": "https://github.com/fwump38/SpinSense#readme",
+    "issue_tracker": "https://github.com/ycsgc1/homeassistant-spinsense/issues",
+    "documentation": "https://github.com/ycsgc1/homeassistant-spinsense#readme",
     "config_flow": true,
     "zeroconf": [
         "_spinsense._tcp.local."

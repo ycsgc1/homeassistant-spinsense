@@ -1,9 +1,9 @@
-# 💿 SpinSense
+# 💿 SpinSense — Home Assistant integration
 Integrate your analogue record player into your digital life. This tool uses audio recognition and a local HTTP/WebSocket service so Home Assistant can discover and display the song currently spinning on your turntable.
 
-![Docker Image](https://img.shields.io/badge/docker-ghcr.io%2Ffwump38%2Fspinsense-blue) 
+> First-party HACS integration for [SpinSense](https://github.com/ycsgc1/SpinSense). Based on the community integration by [@fwump38](https://github.com/fwump38/SpinSense) (MIT). Auto-discovers SpinSense on your LAN via mDNS — default port `3313`.
 
-[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?category=Integration&repository=spinsense&owner=fwump38)
+[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?category=Integration&repository=homeassistant-spinsense&owner=ycsgc1)
 
 ## ✨ Features
 - Automatic ID: Powered by songrec (Shazam-compatible) for high-accuracy track recognition.
