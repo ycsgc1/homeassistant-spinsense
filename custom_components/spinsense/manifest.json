@@ -1,0 +1,16 @@
+{
+    "domain": "spinsense",
+    "name": "SpinSense",
+    "codeowners": [
+        "@fwump38"
+    ],
+    "requirements": [],
+    "version": "0.1.23",
+    "issue_tracker": "https://github.com/fwump38/SpinSense/issues",
+    "documentation": "https://github.com/fwump38/SpinSense#readme",
+    "config_flow": true,
+    "zeroconf": [
+        "_spinsense._tcp.local."
+    ],
+    "iot_class": "local_push"
+}
