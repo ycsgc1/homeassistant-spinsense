@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="custom_components/spinsense/brand/icon@2x.png" alt="SpinSense logo" width="160" />
+</p>
+
 # 💿 SpinSense — Home Assistant integration
 Integrate your analogue record player into your digital life. This tool uses audio recognition and a local HTTP/WebSocket service so Home Assistant can discover and display the song currently spinning on your turntable.
 
