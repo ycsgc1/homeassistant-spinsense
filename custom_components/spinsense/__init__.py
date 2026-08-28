@@ -36,6 +36,7 @@ class SpinSenseAPI:
             "status_msg": "stopped",
             "rms_level": 0.0,
             "track": {"title": "", "artist": "", "album": "", "art_url": ""},
+            "play_clock": None,
         }
 
     async def async_initialize(self) -> None:
@@ -155,6 +156,12 @@ class SpinSenseAPI:
             self.state["track"]["art_url"] = track.get(
                 "art_url", self.state["track"]["art_url"]
             )
+
+        # Read without a fallback, unlike the fields above: the engine sends an
+        # explicit null when nothing is playing, and an engine too old to send
+        # the key at all must clear the progress bar rather than leave the last
+        # track's clock running forever.
+        self.state["play_clock"] = payload.get("play_clock")
 
         self._notify_listeners()
 

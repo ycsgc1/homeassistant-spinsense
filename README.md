@@ -12,6 +12,8 @@ Integrate your analogue record player into your digital life. This tool uses aud
 ## ✨ Features
 - Automatic ID: Powered by songrec (Shazam-compatible) for high-accuracy track recognition.
 
+- Live progress: `media_player` reports the track's duration and position, so Home Assistant draws a progress bar that ticks along with the record — including when you drop the needle mid-side, which shows the real offset rather than starting from zero.
+
 - Home Assistant discovery: The SpinSense service advertises itself over zeroconf so HA can prompt to add the integration.
 
 - Local HTTP/WebSocket service: Home Assistant connects directly to SpinSense for live status and track metadata.

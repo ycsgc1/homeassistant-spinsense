@@ -12,9 +12,11 @@ from homeassistant.components.media_player import (
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.util import dt as dt_util
 
 from .const import DOMAIN
 from .entity import SpinSenseEntity
+from .play_clock import parse as parse_play_clock
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -30,7 +32,12 @@ async def async_setup_entry(
 
 
 class SpinSenseMediaPlayer(SpinSenseEntity, MediaPlayerEntity):
-    """Representation of SpinSense as a media player."""
+    """Representation of SpinSense as a media player.
+
+    No supported features: a record player cannot be played, paused or seeked
+    from Home Assistant, and claiming SEEK to get a draggable progress bar would
+    be a lie. Duration and position render without any feature flag.
+    """
 
     _attr_supported_features = MediaPlayerEntityFeature(0)
 
@@ -53,6 +60,9 @@ class SpinSenseMediaPlayer(SpinSenseEntity, MediaPlayerEntity):
         self._album = None
         self._album_art_url = None
         self._listener_remove = None
+        self._media_duration = None
+        self._media_position = None
+        self._media_position_updated_at = None
 
         self._update_from_api()
 
@@ -96,6 +106,31 @@ class SpinSenseMediaPlayer(SpinSenseEntity, MediaPlayerEntity):
         else:
             self._album_art_url = None
 
+        self._update_position(payload)
+
+    def _update_position(self, payload: dict) -> None:
+        """Anchor the progress bar, or clear it.
+
+        The anchor is fixed for the length of the track (see play_clock.py), so
+        these attributes change when the track does and not once a second —
+        which matters, because the engine pushes a frame every second and each
+        changed attribute is a state_changed event and a recorder row.
+        """
+        if self._state != MediaPlayerState.PLAYING:
+            # Nothing on the platter: a frozen bar from the last track would be
+            # worse than none.
+            self._media_duration = None
+            self._media_position = None
+            self._media_position_updated_at = None
+            return
+
+        duration, position, valid_at = parse_play_clock(payload)
+        self._media_duration = duration
+        self._media_position = position
+        self._media_position_updated_at = (
+            dt_util.utc_from_timestamp(valid_at) if valid_at is not None else None
+        )
+
     @property
     def available(self) -> bool:
         """Return True if the integration can reach the SpinSense service."""
@@ -130,6 +165,28 @@ class SpinSenseMediaPlayer(SpinSenseEntity, MediaPlayerEntity):
     def media_image_url(self) -> str | None:
         """Return the album art URL."""
         return self._album_art_url
+
+    @property
+    def media_duration(self) -> int | None:
+        """Length of the current track, when SpinSense could resolve one."""
+        return self._media_duration
+
+    @property
+    def media_position(self) -> int | None:
+        """Playhead at `media_position_updated_at`, not right now.
+
+        Home Assistant extrapolates the live value from this pair, so a template
+        wanting the current position must do the same arithmetic — as with every
+        media player. The number here is where the needle was when SpinSense
+        identified the track, which for a mid-side needle drop is the offset it
+        actually joined at rather than zero.
+        """
+        return self._media_position
+
+    @property
+    def media_position_updated_at(self):
+        """The instant `media_position` was true."""
+        return self._media_position_updated_at
 
     async def async_play_media(
         self, media_type: str, media_id: str, **kwargs: Any
